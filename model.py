@@ -32,11 +32,12 @@ class QTrainer:
 		self.optimizer = optim.Adam(model.parameters(), lr=self.lr)
 		self.criterion = nn.MSELoss()
 
-	def train_step(self, state, action, reward, next_state, done):
+	def train_step(self, state, action, reward, next_state, done, long_term=False):
 		state = torch.tensor(state, dtype=torch.float)
-		next_state = torch.tensor(next_state, dtype=torch.float)
-		action = torch.tensor(action, dtype=torch.long)
+		action = torch.tensor(action, dtype=torch.int)
 		reward = torch.tensor(reward, dtype=torch.float)
+		next_state = torch.tensor(next_state, dtype=torch.float)
+		
 		# (n, x)
 
 		if len(state.shape) == 1:
@@ -63,6 +64,9 @@ class QTrainer:
 		# preds[argmax(action)] = Q_new
 		self.optimizer.zero_grad()
 		loss = self.criterion(target, pred)
-		loss.backward()
 
+		loss.backward()
 		self.optimizer.step()
+
+		if (long_term):
+			print(loss.detach().numpy())

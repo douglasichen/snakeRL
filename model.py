@@ -15,13 +15,18 @@ class Linear_QNet(nn.Module):
 		x = self.linear2(x)
 		return x
 
-	def save(self, file_name='model.pth'):
+	def save(self, file_name='model2.pth'):
 		model_folder_path = './model'
 		if not os.path.exists(model_folder_path):
 			os.makedirs(model_folder_path)
 
 		file_name = os.path.join(model_folder_path, file_name)
 		torch.save(self.state_dict(), file_name)
+	
+	def load(self, file_name):
+		model_folder_path = './model'
+		file_name = os.path.join(model_folder_path, file_name)
+		self.load_state_dict(torch.load(file_name))
 
 
 class QTrainer:

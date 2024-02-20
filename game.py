@@ -25,6 +25,8 @@ BLACK = (0,0,0)
 
 BLOCK_SIZE = 20
 SPEED = 4000
+# SPEED = 1
+SLOW_SPEED = 100
 
 class SnakeGameAI:
 
@@ -79,11 +81,17 @@ class SnakeGameAI:
 	def play_step(self, action):
 		self.frame_iteration += 1
 		# 1. collect user input
+		went = False
 		for event in pygame.event.get():
 			if event.type == pygame.QUIT:
 				pygame.quit()
 				quit()
+			elif event.type == pygame.MOUSEBUTTONDOWN:
+				self._move(action)
+				went = True
 		
+		# if not went:
+		# 	return 'went', False, 0
 		# 2. move
 		self._move(action) # update the head
 
@@ -91,9 +99,9 @@ class SnakeGameAI:
 		# 3. check if game over
 		reward = 0
 		game_over = False
-		if self.is_collision() or self.frame_iteration > 100*len(self.snake):
+		if self.is_collision() or len(self.snake)*100<self.frame_iteration:
 			game_over = True
-			reward = -10
+			reward = -40
 			return reward, game_over, self.score
 
 		# update grid AFTER collision check
@@ -102,12 +110,13 @@ class SnakeGameAI:
 		# 4. place new food or just move
 		if self.head == self.food:
 			self.score += 1
-			reward = 10
+			reward = 40
 			self._place_food()
 		else:
 			self.grid[self.snake[-1].y][self.snake[-1].x] = 0
 			self.snake.pop()
 			# reward = -1
+		reward -= 0.002 * ((self.food.x-self.head.x) ** 2 + (self.food.y-self.head.y) ** 2)
 		
 		# 5. update ui and clock
 		self._update_ui()
@@ -120,7 +129,7 @@ class SnakeGameAI:
 		if p is None:
 			p = self.head
 		# hits boundary
-		if p.x<0 or p.x>=self.grid_width or p.y<0 or p.y>=self.grid_height:
+		if self.out_of_bounds(p):
 			return True
 
 		# hits itself
@@ -129,6 +138,8 @@ class SnakeGameAI:
 
 		return False
 
+	def out_of_bounds(self, p):
+		return p.x<0 or p.x>=self.grid_width or p.y<0 or p.y>=self.grid_height
 
 	def _update_ui(self):
 		self.display.fill(BLACK)

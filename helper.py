@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 from IPython import display
+from game import Point
 
 plt.ion()
 
@@ -17,3 +18,6 @@ def plot(scores, mean_scores):
     plt.text(len(mean_scores)-1, mean_scores[-1], str(mean_scores[-1]))
     plt.show(block=False)
     plt.pause(.1)
+
+def add_points(a, b):
+    return Point(a.x + b.x, a.y + b.y)

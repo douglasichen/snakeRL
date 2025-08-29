@@ -36,15 +36,17 @@ python agent.py
 ```
 
 This will:
-• Launch the Snake game environment (game.py).
-• Train the agent with experience replay and epsilon-greedy policy.
-• Continuously update plots of score and mean score (helper.py).
-• Save the trained model to ./model/model.pth.
+
+- Launch the Snake game environment (game.py).
+- Train the agent with experience replay and epsilon-greedy policy.
+- Continuously update plots of score and mean score (helper.py).
+- Save the trained model to ./model/model.pth.
 
 ⸻
 
 📁 Project Structure
 
+```
 snakeRL/
 │── agent.py # Defines the RL Agent and training loop
 │── game.py # Snake game environment (pygame-based)
@@ -53,6 +55,7 @@ snakeRL/
 │── model/
 │ └── model.pth # Saved trained model
 │── README.md # Project documentation
+```
 
 ⸻
 
